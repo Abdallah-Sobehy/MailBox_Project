@@ -6,7 +6,15 @@ package entity;
  * @author Abdallah Sobehy
  * Created by Mostafa Fateen on 10/4/2015.
  */
-public class MailUser {
+import java.io.Serializable;
+import javax.persistence.*;
+import static javax.persistence.CascadeType.*;
+
+import java.util.Collection;
+import java.util.ArrayList;
+
+@Entity
+public class MailUser implements Serializable {
 	/** Users count, also used to generate ID for users.*/
 	private static int usersCount = 0;
     private int userID;
@@ -41,7 +49,7 @@ public class MailUser {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
+    @Id
     public int getUserID() {
         return userID;
     }
