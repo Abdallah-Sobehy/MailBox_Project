@@ -82,7 +82,7 @@ public class MailUser implements Serializable {
         //TODO after writing the message
     }
     
-    void print_info()
+    public void print_info()
     {
     	System.out.println("user:" + getUserName() + " User ID: "+ getUserID() + " User rights: " + getUserRights());
     }

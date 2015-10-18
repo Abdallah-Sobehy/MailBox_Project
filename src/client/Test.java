@@ -1,4 +1,7 @@
-package entity;
+package client;
+
+import entity.Admin;
+import entity.MailUser;
 
 public class Test {
 	public static void main(String args[])
@@ -14,7 +17,10 @@ public class Test {
 		u_bcast.print_info();
 		// Create a user with an unacceptable type
 		MailUser u_invalid = ad.create_user("teet", "xxx");
-		
+		u_invalid.print_info();
+		// Create a admin
+		MailUser u_ad = ad.create_user("Admin1", "admin");
+		u_ad.print_info();
 		
 	}
 

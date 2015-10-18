@@ -8,7 +8,8 @@ package ejb;
 import javax.ejb.Remote;
 import entity.MailUser;
 
-@Remote public interface DirectoryManagerInt {
+@Remote 
+public interface DirectoryManagerInt {
 	/**
 	 * adds MailUser to the database
 	 * @param mail_user the user to be added to the database
@@ -21,5 +22,8 @@ import entity.MailUser;
 	 */
 	public void removeUser(int id);
 	
+	public boolean signIn(String username, String password );
+	
+	public void printUser (String username);
 	
 }

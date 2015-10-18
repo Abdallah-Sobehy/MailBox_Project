@@ -24,12 +24,6 @@ public class Admin extends MailUser {
 	 */
 	public MailUser create_user(String name, String rights)
 	{
-		// If the rights type is invalid abort user creation
-		if (!(rights.equals("normal")) && !(rights.equals("bcast")) )
-		{
-			System.out.println("Invalid user rights, creating a user failed.");
-			return null;
-		}
 		MailUser user = new MailUser(name);
 		set_rights(user,rights);
 		return user;
@@ -41,6 +35,11 @@ public class Admin extends MailUser {
 	 */
 	public void set_rights(MailUser user,String rights)
 	{
+		if (!(rights.equals("normal")) && !(rights.equals("bcast")) && !(rights.equals("admin")))
+		{
+			System.out.println("Invalid user rights, Rights will be forced to normal.");
+			rights = "normal";
+		}
 		user.setUserRights(rights);
 	}
 }
