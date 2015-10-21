@@ -16,7 +16,7 @@ public class Client {
              do{
             	 System.out.println("Enter username");
                  username = in.nextLine();
-            	// username = "abdallah";
+            	 //username = "abdallah";
                 // System.out.println("Enter password");
                 // password = in.nextLine();
              }while(!dm.signIn(username, password));

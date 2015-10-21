@@ -14,7 +14,13 @@ import java.util.Collection;
 import java.util.ArrayList;
 
 @Entity
-public class MailUser implements Serializable {
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+    name="USERRIGHTS",
+    discriminatorType=DiscriminatorType.STRING
+)
+@DiscriminatorValue(value="Normal")
+public class MailUser{
 	/** Users count, also used to generate ID for users.*/
 	private static int usersCount = 0;
     private int userID;
@@ -49,7 +55,7 @@ public class MailUser implements Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    @Id
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
     public int getUserID() {
         return userID;
     }

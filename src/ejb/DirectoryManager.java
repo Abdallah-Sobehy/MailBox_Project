@@ -21,14 +21,13 @@ public class DirectoryManager implements DirectoryManagerInt
 	 */
 	public void addUser(MailUser mail_user)
 	{
-		System.out.println("persisting.........");
 		em.persist(mail_user);
 	}
 	
 	public boolean signIn(String username, String password){
 		//TODO if rows in users database == 0
 		if(true){
-			MailUser ad = new MailUser(username);
+			Admin ad = new Admin(username);
 			currentuser = ad;
 			addUser(ad);
 			return true;

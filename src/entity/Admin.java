@@ -1,9 +1,19 @@
 package entity;
+import java.io.Serializable;
+
+import javax.persistence.*;
+import static javax.persistence.CascadeType.*;
 /**
 * The Admin class inherits MailUser class. This type of user is able to:
 * Create a new user, set rights for user, delete users
 */
+@Entity
+@Table(name="MAILUSER")
+@DiscriminatorValue("admin")
 public class Admin extends MailUser {
+	/** Empty Constructor*/
+	public Admin(){}	
+
 	/**
 	 * Constructor initializes an admin user
 	 * Assigns the rights of the admin
