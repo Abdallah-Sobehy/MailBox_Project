@@ -1,8 +1,12 @@
+/**
+ * The entity package contains the objects of the program
+ */
 package entity;
-import java.io.Serializable;
 
+import java.io.Serializable;
 import javax.persistence.*;
 import static javax.persistence.CascadeType.*;
+
 /**
 * The Admin class inherits MailUser class. This type of user is able to:
 * Create a new user, set rights for user, delete users

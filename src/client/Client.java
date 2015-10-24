@@ -1,3 +1,6 @@
+/**
+ * The client package contains the client's logic of the program
+ */
 package client;
 import javax.naming.InitialContext;
 import ejb.DirectoryManagerInt;
@@ -13,7 +16,6 @@ import java.util.Scanner;
  * @version 1.0
  */
 
-//TODO Change the class name to admin_client
 public class Client {
     public static void main(String args[]) {
         try {
