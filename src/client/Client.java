@@ -1,6 +1,5 @@
 package client;
 import javax.naming.InitialContext;
-import javax.ejb.*;
 import ejb.DirectoryManagerInt;
 import java.util.Scanner;
 

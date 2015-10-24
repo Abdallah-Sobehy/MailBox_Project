@@ -100,7 +100,7 @@ public class DirectoryManager implements DirectoryManagerInt {
 	{
 		String tmp = "Choose one of the following options: \n";
 		tmp += "1 - Add a new mail user\n";
-		tmp += "2 - Remove a new mail user\n";
+		tmp += "2 - Remove an existing mail user\n";
 		tmp += "3 - List all users\n";
 		tmp += "4 - update user rights\n";
 		tmp += "5 - lookup user rights\n";
@@ -117,10 +117,14 @@ public class DirectoryManager implements DirectoryManagerInt {
 	public String removeUser(int id) {
 		try
 		{
+			// First check if the user already exists, if it is not found an exception will be thrown indicating delete failed.
+			Query q = em.createQuery("SELECT u FROM MailUser u where u.userID = :id");
+			q.setParameter("id", id);
+			MailUser u = (MailUser) q.getSingleResult();
 			Query q0 = em.createQuery("DELETE FROM MailUser x where x.userID = :id");
 			q0.setParameter("id", id);
 			q0.executeUpdate();
-			return "Delet successful of User with ID: " + id;
+			return "Delete successful of User with ID: " + id;
 		} catch (Exception e)
 		{
 			return "User with ID: " + id + " was not found. Delete Failed";
