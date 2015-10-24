@@ -59,6 +59,7 @@ public class Client {
             	// List all users	 
             	 case 3:
             		 System.out.println(dm.list_all_users());
+            		 break;
             	 // Admin wants to exit
             	 case 6:
             		 return;

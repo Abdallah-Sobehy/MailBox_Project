@@ -1,14 +1,13 @@
 package ejb;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import com.sun.xml.bind.v2.schemagen.xmlschema.List;
 
 import entity.*;
 
@@ -130,12 +129,12 @@ public class DirectoryManager implements DirectoryManagerInt {
 	
 	public String list_all_users()
 	{
-		 TypedQuery<MailUser[]> query = em.createQuery("SELECT u FROM MailUser u WHERE u.userRights=:normal", MailUser[].class);
-		 query.setParameter("normal", "normal");
-		 Collection<MailUser[]> results = query.getResultList();
+		 Query query = em.createQuery("SELECT u FROM MailUser u ");
+		 List<MailUser> results = query.getResultList();
+		 //return results;
 		 String tmp = "";
-		 for (MailUser[] result : results) {
-			 tmp += result.toString() + "\n";
+		 for (int i =0; i<results.size();i++) {
+			 tmp += results.get(i).print_info() + "\n";
 		}
 		 return tmp;
 	}
