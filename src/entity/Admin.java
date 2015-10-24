@@ -32,6 +32,7 @@ public class Admin extends MailUser {
 	 * @param rights the rights of the user: "admin, bcast, or normal"
 	 * @return user object.
 	 */
+	//TODO add password when creating user
 	public MailUser create_user(String name, String rights)
 	{
 		MailUser user = new MailUser(name);

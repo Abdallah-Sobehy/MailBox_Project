@@ -10,20 +10,36 @@ import entity.MailUser;
 
 @Remote 
 public interface DirectoryManagerInt {
+
 	/**
-	 * adds MailUser to the database
-	 * @param mail_user the user to be added to the database
+	 * Creates a new user with the input user name and rights
+	 * Persists the new user into the database.
+	 * returns Id of the created user.
 	 */
-	public void addUser(MailUser mail_user);
+	public int addUser(String username, String userrights);
 	
 	/**
 	 * removes a Mailuser from the database
 	 * @param id of the user to be removed
 	 */
-	public void removeUser(int id);
+	public String removeUser(int id);
 	
 	public boolean signIn(String username, String password );
-	
-	public void printUser (String username);
+	/**
+	 * @return a string containing info about logged in user: name, ID, rights
+	 */
+	public String printUser ();
+	/**
+	 * @return a string containing info about user with given ID: name, ID, rights
+	 */
+	public String printUser (int id);
+	/**
+	 * @return a string representing the menu of available options for the admin: add, remove, list users or their rights
+	 */
+	public String admin_menu();
+	/**
+	 * Returns a strong of all users in the data base.
+	 */
+	public String list_all_users();
 	
 }

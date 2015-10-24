@@ -19,7 +19,7 @@ import java.util.ArrayList;
     name="USERRIGHTS",
     discriminatorType=DiscriminatorType.STRING
 )
-@DiscriminatorValue(value="Normal")
+@DiscriminatorValue(value="normal")
 public class MailUser{
 	/** Users count, also used to generate ID for users.*/
 	private static int usersCount = 0;
@@ -88,8 +88,12 @@ public class MailUser{
         //TODO after writing the message
     }
     
-    public void print_info()
+    public String print_info()
     {
-    	System.out.println("user:" + getUserName() + " User ID: "+ getUserID() + " User rights: " + getUserRights());
+    	return "user:" + getUserName() + " User ID: "+ getUserID() + " User rights: " + getUserRights();
+    }
+    public String toString()
+    {
+    	return "user:" + getUserName() + " User ID: "+ getUserID() + " User rights: " + getUserRights();
     }
 }

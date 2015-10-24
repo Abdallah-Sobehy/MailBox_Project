@@ -18,7 +18,8 @@
     <mkdir dir="${client}"/>
   </target>
 
-  <target name="all">
+  <target name="redeploy">
+    <antcall target="undeploy"/>
     <antcall target="clean"/>
     <antcall target="build"/>
     <antcall target="deploy"/>
