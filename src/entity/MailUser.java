@@ -22,9 +22,9 @@ import java.util.ArrayList;
 @DiscriminatorValue(value="normal")
 public class MailUser{
 	/** Users count, also used to generate ID for users.*/
-	private static int usersCount = 0;
     private int userID;
     private String userName;
+    private String password;
     //TODO add mailbox here
     //TODO [ADVANCED] Password + its methods
     /**userRights could have one of three values "admin, bcast, or normal"*/
@@ -34,11 +34,10 @@ public class MailUser{
 	 * Constructor initializes a user
 	 * @param name name of the user
 	 */
-    public MailUser(String name)
+    public MailUser(String name, String pword)
     {
     	userName = name;
-    	setUserID(usersCount);
-    	usersCount ++;
+    	password = pword;
     	//TODO assign a mailbox
     	//TODO assign password
     }
@@ -46,6 +45,10 @@ public class MailUser{
     
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+    
+    public void setPassword(String passWord){
+    	this.password = passWord;    	
     }
 
     public void setUserRights(String userRights) {
@@ -62,6 +65,10 @@ public class MailUser{
 
     public String getUserName() {
         return userName;
+    }
+    
+    public String getPassword(){
+    	return password;    	
     }
 
     public String getUserRights() {
@@ -88,12 +95,15 @@ public class MailUser{
         //TODO after writing the message
     }
     
-    public String print_info()
-    {
+    public String print_info(){
+    	return "user: "+ getUserName() + "\t User ID: " + getUserID() 
+    			+ "\t User rights: " + getUserRights()+"\n-----------------------------------------------------";
+    }
+    
+    public String toString()    {
     	return "user:" + getUserName() + " User ID: "+ getUserID() + " User rights: " + getUserRights();
     }
-    public String toString()
-    {
-    	return "user:" + getUserName() + " User ID: "+ getUserID() + " User rights: " + getUserRights();
-    }
+
+
+
 }

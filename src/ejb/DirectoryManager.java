@@ -4,11 +4,13 @@
 package ejb;
 
 import entity.*;
+
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 /**
@@ -42,7 +44,7 @@ public class DirectoryManager implements DirectoryManagerInt {
                 Long.class);
         long user_count = q.getSingleResult();
         if (user_count == 0) {
-            Admin ad = new Admin(username);
+            Admin ad = new Admin(username,password);
             currentuser = ad;
             em.persist(ad);
             return true;
@@ -54,7 +56,7 @@ public class DirectoryManager implements DirectoryManagerInt {
             try {
                 MailUser u = (MailUser) q0.getSingleResult(); // throws an exception if not found.
                 // Check if the found user is an admin to login
-                if (u.getUserRights().compareTo("admin") == 0) {
+                if (u.getUserRights().compareTo("admin") == 0 && u.getPassword().compareTo(password) == 0) {
                     currentuser = u;
                     return true;
                 } else throw new Exception();// The found user was not an admin
@@ -73,14 +75,14 @@ public class DirectoryManager implements DirectoryManagerInt {
      * @param userrights
      * @return the generated user ID
      */
-    public int addUser(String username, String userrights) {
+    public int addUser(String username,String pword, String userrights) {
         // If the new user is an admin
         if (userrights.compareTo("admin") == 0) {
-            Admin new_admin = new Admin(username);
+            Admin new_admin = new Admin(username,pword);
             em.persist(new_admin);
             return new_admin.getUserID();
         } else {
-            MailUser new_user = new MailUser(username);
+            MailUser new_user = new MailUser(username,pword);
             new_user.setUserRights("normal");
             em.persist(new_user);
             return new_user.getUserID();
@@ -159,14 +161,43 @@ public class DirectoryManager implements DirectoryManagerInt {
      * @return The action menu
      */
     public String admin_menu() {
-        String tmp = "Choose one of the following options: \n";
+        String tmp = "\n*******************************************\n";
+        tmp += "Choose one of the following options: \n";
         tmp += "1 - Add a new mail user\n";
         tmp += "2 - Remove an existing mail user\n";
         tmp += "3 - List all users\n";
         tmp += "4 - update user rights\n";
         tmp += "5 - lookup user rights\n";
         tmp += "6 - Exit\n";
+        tmp += "*******************************************\n";
         return tmp;
     }
 
+	public boolean updateRights(int id, String rights){
+		Query q0 = em.createQuery("SELECT o FROM MailUser o where o.userID = :id");
+		q0.setParameter("id", id);
+		try {
+			MailUser u = (MailUser) q0.getSingleResult(); // throws an exception if not found.
+			Query q1 = em.createQuery("UPDATE MailUser SET userRights = :rights WHERE userID = :id");
+			q1.setParameter("id", id);
+			q1.setParameter("rights",rights);
+			q1.executeUpdate();
+			return true;
+        } catch (Exception e) {
+            return false;
+        }
+	}
+
+	public String lookupRights(int id){
+		String this_rights= null;
+		try {
+		Query q = em.createQuery("SELECT u FROM MailUser u where u.userID = :id");
+        q.setParameter("id", id);
+        MailUser u = (MailUser) q.getSingleResult();
+        this_rights = u.getUserRights();
+        return "User with ID: " + id + " is a(n) " + this_rights + " user";
+		} catch (Exception e) {
+            return "User with ID: " + id + " was not found.";
+        }
+	}
 }

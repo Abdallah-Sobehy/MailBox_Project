@@ -35,7 +35,7 @@ public interface DirectoryManagerInt {
 	 * @param userrights
 	 * @return the generated user ID
 	 */
-	public int addUser(String username, String userrights);
+	public int addUser(String username,String pword, String userrights);
 
 	/**
 	 * Removes a user from the database
@@ -69,9 +69,16 @@ public interface DirectoryManagerInt {
 
 	/**
 	 * A simple method that returns a string containing the main menu of the directory manager
-	 * from which the user choses the actions he wants
+	 * from which the user chooses the actions he wants
 	 *
 	 * @return The action menu
 	 */
 	public String admin_menu();
+	
+	
+	public boolean updateRights(int id, String rights);
+	
+	public String lookupRights(int id);
+	
+	
 }

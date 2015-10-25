@@ -23,9 +23,9 @@ public class Admin extends MailUser {
 	 * Assigns the rights of the admin
 	 * @param name name of the admin
 	 */
-	public Admin(String name)
+	public Admin(String name, String pword)
 	{
-		super(name);
+		super(name,pword);
 		setUserRights("admin");
 	}
 	
@@ -37,9 +37,9 @@ public class Admin extends MailUser {
 	 * @return user object.
 	 */
 	//TODO add password when creating user
-	public MailUser create_user(String name, String rights)
+	public MailUser create_user(String name,String pword, String rights)
 	{
-		MailUser user = new MailUser(name);
+		MailUser user = new MailUser(name,pword);
 		set_rights(user,rights);
 		return user;
 	}
