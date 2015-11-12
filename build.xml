@@ -6,16 +6,51 @@
   <!-- set glassfish.home to point to glassfish installation  -->  
   <property environment="env"/>
   <property name="glassfish.home" value="${env.GLASSFISH_HOME}"/>
+  <!-- set properties for the Directory Manager -->
+  <property name="entity" value="entity_dm"/>
+  <property name="ejb" value="ejb_dm"/>
+  <property name="client" value="client_dm"/>
 
-  <property name="entity" value="entity"/>
-  <property name="ejb" value="ejb"/>
-  <property name="client" value="client"/>
+  <!-- set properties for the Mail Box Manager -->
+  <property name="entity_mbm" value="entity_mbm"/>
+  <property name="ejb_mbm" value="ejb_mbm"/>
+  <property name="client_mbm" value="client_mbm"/>
+
+
+<path id="MailBoxManager.classpath">
+<pathelement location="class"/>
+<pathelement location="jars"/>
+<pathelement location="${glassfish.home}/lib/appserv-rt.jar"/>
+<pathelement location="${glassfish.home}/lib/javaee.jar"/>
+<pathelement location="${glassfish.home}/lib/gf-client.jar"/>
+<pathelement location="${glassfish.home}/lib/mysql-connector-java-5.1.18-bin.jar"/>
+<pathelement location="${glassfish.home}/lib/jndi-properties.jar"/>
+<pathelement location="jars/asm-3.1.jar"/>
+<pathelement location="jars/gson-2.2.4.jar"/>
+<pathelement location="jars/jackson-core-asl-1.9.2.jar"/>
+<pathelement location="jars/jackson-jaxrs-1.9.2.jar"/>
+<pathelement location="jars/jackson-mapper-asl-1.9.2.jar"/>
+<pathelement location="jars/jackson-xc-1.9.2.jar"/>
+<pathelement location="jars/jersey-client-1.17.1.jar"/>
+<pathelement location="jars/jersey-core-1.17.1.jar"/>
+<pathelement location="jars/jersey-json-1.17.1.jar"/>
+<pathelement location="jars/jersey-server-1.17.1.jar"/>
+<pathelement location="jars/jersey-servlet-1.17.1.jar"/>
+<pathelement location="jars/jettison-1.1.jar"/>
+<pathelement location="jars/jsr311-api-1.1.1.jar"/>
+</path>
 
   <target name="init">
     <!-- Create the build directory structure -->
     <mkdir dir="${entity}"/>
     <mkdir dir="${ejb}"/>
     <mkdir dir="${client}"/>
+    
+    <mkdir dir="${entity_mbm}"/>
+    <mkdir dir="${ejb_mbm}"/>
+    <mkdir dir="${client_mbm}"/>
+
+   <mkdir dir="bin"/>
   </target>
 
   <target name="redeploy">
@@ -25,42 +60,79 @@
     <antcall target="deploy"/>
   </target>
 
+  <target name="restDeployRun">
+    <antcall target="undeploy"/>
+    <antcall target="clean"/>
+    <antcall target="build"/>
+    <antcall target="deploy"/>
+<antcall target="runRestful"/>
+  </target>
+
   <target name="build" description="build" depends="init">
-    <antcall target="build-entity"/>
-    <antcall target="build-ejb"/>
-    <antcall target="build-client"/>
+
+
+
+<antcall target="build-entity"/>
+<antcall target="build-entity_mbm"/>
+<antcall target="build-ejb"/>
+<antcall target="build-ejb_mbm"/>
+<antcall target="build-client"/>
+<antcall target="build-client_mbm"/>
+<antcall target="build_rest2"/>
+<antcall target="build_publisher"/>
+
     <antcall target="build-jar"/>
   </target>
 
-  <target name="build-entity"
-        description="Build entity beans" >
-    <javac classpath="${glassfish.home}/lib/javaee.jar" 
-           srcdir="src/entity"
+<!-- building entity package of the Directory Manager -->
+  <target name="build-entity" description="Build entity beans" >
+    <javac classpath="${glassfish.home}/lib/*.jar" 
+           srcdir="src/${entity}"
            destdir="."
-           includes="Admin.java,MailUser.java"/>
+           includes="Admin.java,MailUser.java, BcastUser.java"/>
   </target>
 
-  <target name="build-ejb"
-        description="Build ejb jar" >
-    <javac classpath="${glassfish.home}/lib/javaee.jar:./entities.jar" 
-           srcdir="src/ejb"
+<!-- building entity package of the MailBox Manager -->
+<target name = "build-entity_mbm">
+
+	<javac classpath="${glassfish.home}/lib/*.jar" srcdir = "src/${entity_mbm}" 
+	destdir="." includes="Message.java" />
+	
+</target>
+<!-- building ejb package of the Directory Manager -->
+  <target name="build-ejb" description="Build ejb jar" >
+    <javac classpath="${glassfish.home}/lib/*.jar" 
+           srcdir="src"
            destdir="."
-           includes="DirectoryManager.java,DirectoryManagerInt.java"/>
+           includes="${ejb}/DirectoryManager.java,${ejb}/DirectoryManagerInt.java,${ejb_mbm}/MailBoxManagerInt.java"/>
   </target>
 
+<!-- building ejb package of the MailBox Manager -->
+<target name="build-ejb_mbm">
+	<javac classpath="${glassfish.home}/lib/*.jar:./jars/*" srcdir="src"
+           destdir="." includes="${ejb_mbm}/MailBoxManager.java,${ejb_mbm}/MailBoxManagerInt.java,${ejb}/DirectoryManagerInt.java/" />
+</target>
+
+<!-- building client package of the Directory Manager -->
   <target name="build-client" 
         description="Build client jar" >
-    <javac classpath="${glassfish.home}/lib/javaee.jar" 
-           srcdir="src/client"
+    <javac classpath="${glassfish.home}/lib/*.jar" 
+           srcdir="src/${client}"
            destdir="."
-           includes="Client.java"/>
+           includes="Client_dm.java,AutoClient_dm.java"/>
   </target>
+<!-- building client package of the MailBox Manager -->
+<target name="build-client_mbm">
+	<javac classpath="${glassfish.home}/lib/*.jar:jersey-client.jar" srcdir="src/${client_mbm}"
+           destdir="." includes="Client_mbm.java, RestClient_mbm.java" />
+</target>
+
   
   <target name="build-jar" 
         description="Build jar archive" >
     <jar destfile="MailBox_Project.jar"
          basedir="."
-	 includes="META-INF/persistence.xml,client/,ejb/,entity/"/>
+	 includes="META-INF/persistence.xml,${client}/,${ejb}/,${entity}/,${client_mbm}/,${ejb_mbm}/,${entity_mbm}/"/>
   </target>
 
 
@@ -82,12 +154,41 @@
     </exec>
   </target>
 
-  <target name="clean" 
-          description="clean up" >
+<target name="build_rest">
+<javac classpath="./jars/*:${glassfish.home}/lib/*.jar:" srcdir="src"
+           destdir="." includes="server_rest/Rest_mbm.java,../../META-INF/persistence.xml" />
+</target>
+
+<target name="build_rest2">
+<javac classpath="./jars/*:${glassfish.home}/lib/*.jar:" srcdir="src"
+           destdir="." includes="ejb_mbm/Rest_mbm.java,../../META-INF/persistence.xml" />
+</target>
+
+<target name="build_publisher">
+<javac classpath="./jars/*:${glassfish.home}/lib/*.jar:MailBox_Project.jar:bin/*:com.sun.jersey.jersey-server-1.4.0.jar:" srcdir="src"
+           destdir="." includes="ejb_mbm/Publisher.java,../../META-INF/persistence.xml" />
+</target>
+
+<target name="runRestful">
+<java classname="ejb_mbm.Publisher" classpath="./jars/*:${glassfish.home}/lib/*:MailBox_Project.jar:bin/*:com.sun.jersey.jersey-server-1.4.0.jar:" failonerror="true" fork="yes">
+</java>
+</target>
+
+<target name="runRestfulClient">
+<java classname="client_mbm.RestClient_mbm" classpath="./jars/*:${glassfish.home}/lib/*:MailBox_Project.jar:" failonerror="true" fork="yes">
+</java>
+</target>
+
+  <target name="clean" description="clean up" >
     <delete file="MailBox_Project.jar"/>
     <delete dir="${entity}"/>
     <delete dir="${ejb}"/>
     <delete dir="${client}"/>
+
+    <delete dir="${entity_mbm}"/>
+    <delete dir="${ejb_mbm}"/>
+    <delete dir="${client_mbm}"/>
+    <delete dir="bin"/>
   </target>
 
 </project>
